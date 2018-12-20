@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>
+		les deplacements
+	</title>
+	<style type="text/css">
+		body {
+			color: #ffffff;
+			text-align: center;
+			background: #000000;
+		}
+
+		div {
+			margin: auto;
+			width: 500px;
+		}
+	</style>
+</head>
+
+<body>
+	<div>les deplacements</div>
+	<div>
+		<canvas id="myCanvas" width="500" height="500">
+			Votre navigateur n'est pas compatible.
+		</canvas>
+	</div>
+	<script type="text/javascript">
+
+
+
+
+		var theCanvas = document.getElementById('myCanvas');
+		var context = theCanvas.getContext('2d');
+
+
+
+
+		
+		var angle = Math.floor(Math.random() * 360);
+		var radian = angle * Math.PI / 180;
+		
+		var x = Math.random() * 200, y = Math.random() * 200;
+		var color = ["white", "yellow", "pink", "green"];
+		var balls = [];
+
+		function bg() {
+			context.fillStyle = "black";
+			context.fillRect(0, 0, 500, 500);
+		}
+		function createBalls() {
+			var nbBalle = 100; 
+			for (var i = 0; i <= nbBalle; i++)
+				balls.push({	
+				x: Math.floor(Math.random() * 500),
+				y: Math.floor(Math.random() * 500),
+				color: color[Math.floor(Math.random() * color.length)],
+				velocityX: Math.cos(radian) * Math.floor(Math.random()*10),
+				velocityY: Math.sin(radian) * Math.floor(Math.random()*10),
+				radius: Math.floor(Math.random() * 30)
+			});
+				console.log(balls);
+		}
+		function dessineMoi(x, y, color, radius) {
+			context.beginPath();
+			context.fillStyle = color;
+			context.arc(x, y, radius, 0, 2 * Math.PI);
+			context.fill();
+			context.closePath();
+		}
+		function dessineBalles() {
+			balls.map(function (ball) {
+				dessineMoi(ball.x, ball.y, ball.color, ball.radius);
+
+			});
+		}
+		function deplaceBalles() {
+			var i;
+			for (i = 0; i < balls.length; i++) {
+				var ball = balls[i];
+				deplaceBalle(ball);
+
+			};
+
+		}
+		function deplaceBalle(ball) {
+			ball.x += ball.velocityX;
+			ball.y += ball.velocityY;
+			if (ball.x + ball.radius > theCanvas.width || ball.x < ball.radius) {
+				ball.velocityX *= -1;
+			}
+			if (ball.y + ball.radius > theCanvas.height || ball.y < ball.radius) {
+				ball.velocityY *= -1;
+			}
+
+		}
+		function interFrame() {
+			bg();
+			dessineBalles();
+			deplaceBalles();
+
+
+
+			request = window.requestAnimationFrame(interFrame);
+		}
+		// ANIMATION
+		createBalls();
+		window.requestAnimationFrame(interFrame);
+
+	</script>
+</body>
+
+</html>
